@@ -22,3 +22,19 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# TruffleHog test files (ne pas commiter en production!)
+# Ces fichiers contiennent des secrets en clair pour tester TruffleHog
+test-secrets.js
+test-secrets.py
+.env.test
+config-secrets.yaml
+config-secrets.json
+Dockerfile.test
+run-trufflehog.sh
+TRUFFLEHOG-TEST-README.md
+QUICK-START.md
+
+# Résultats des scans TruffleHog
+trufflehog-results/
+*.trufflehog.json

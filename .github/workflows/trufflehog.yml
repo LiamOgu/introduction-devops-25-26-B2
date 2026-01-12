@@ -1,0 +1,43 @@
+name: TruffleHog Secret Scanning
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+  pull_request:
+    branches:
+      - main
+      - master
+      - develop
+
+jobs:
+  scan-secrets:
+    name: Scan for exposed secrets
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Récupère tout l'historique pour scanner tous les commits
+
+      - name: TruffleHog OSS
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --debug --only-verified=false
+
+      - name: Summary
+        if: failure()
+        run: |
+          echo "⚠️ Des secrets ont été détectés dans le code !"
+          echo "Consultez les logs ci-dessus pour plus de détails."
+          echo ""
+          echo "Actions recommandées :"
+          echo "1. Révoquez immédiatement les secrets exposés"
+          echo "2. Supprimez les secrets du code"
+          echo "3. Utilisez des variables d'environnement ou un gestionnaire de secrets"
